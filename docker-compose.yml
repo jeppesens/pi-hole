@@ -1,0 +1,46 @@
+version: '3.3'
+
+networks:
+  # We need a network config because there's issues if you have another VPN on machine
+  default:
+    ipam:
+      config:
+      - subnet: 172.16.238.0/24
+        gateway: 172.16.238.1
+
+services:
+  pihole:
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    environment:
+      TZ: 'Europe/Stockholm'
+      WEBPASSWORD: 'EC8a-WPW'
+      DNS1: '172.16.238.100#5300'
+      DNS2: 'no'
+      TEMPERATUREUNIT: 'c'
+      ServerIP: ${ServerIP:-10.0.1.12}
+    volumes:
+      - './etc-pihole/:/etc/pihole/'
+      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  dns-crypt-proxy:
+    image: klutchell/dnscrypt-proxy:latest
+    dns:
+      - 1.1.1.1
+    networks:
+      default:
+        ipv4_address: 172.16.238.100
+    expose:
+      - "5300/udp"
+      - "5300/tcp"
+    restart: unless-stopped
+    volumes:
+      - ./dnscrypt-proxy.toml:/dnscrypt-proxy.toml
