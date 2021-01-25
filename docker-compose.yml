@@ -23,8 +23,8 @@ services:
       TEMPERATUREUNIT: 'c'
       ServerIP: ${ServerIP:-10.0.1.12}
     volumes:
-      - './etc-pihole/:/etc/pihole/'
-      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      - './.etc-pihole/:/etc/pihole/'
+      - './.etc-dnsmasq.d/:/etc/dnsmasq.d/'
     cap_add:
       - NET_ADMIN
     restart: unless-stopped

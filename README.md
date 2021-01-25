@@ -93,6 +93,12 @@ sudo pip3 -v install docker-compose
 # Download this repo
 sudo git clone https://github.com/jeppesens/pi-hole.git /pi-hole
 
+# Add Pi's IP to config
+cd /pi-hole
+sudo nano .env
+# add this line with your Pi's IP
+ServerIp=10.0.1.12
+
 # create and start the service
 sudo cp /pi-hole/pi-hole.service /etc/systemd/system/pi-hole.service
 sudo systemctl enable pi-hole
