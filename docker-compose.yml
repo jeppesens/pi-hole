@@ -28,8 +28,10 @@ services:
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
+    depends_on:
+      - dnscrypt-proxy
 
-  dns-crypt-proxy:
+  dnscrypt-proxy:
     image: klutchell/dnscrypt-proxy:latest
     dns:
       - 1.1.1.1
